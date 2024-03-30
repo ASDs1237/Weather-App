@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App-Easy Tutorials</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="enter city name" spellcheck="false">
+            <button><img src="https://uxwing.com/wp-content/themes/uxwing/download/user-interface/search-icon.png"></button>
+    </div>
+    <div class="error">
+        <p>Invalid city name</p>
+    </div>
+    <div class="weather">
+        <img src="https://clipartmag.com/images/rain-cloud-images-34.png" class="weather-icon">
+        <h1 class="temp"> 22°c</h1>
+        <h2 class="city">New York</h2>
+        <div class="details">
+            <div class="col">
+            <img src="https://static-00.iconduck.com/assets.00/humidity-icon-2048x1675-xxsge5os.png">
+            <div> 
+                <p class="humidity">50%</p>
+                <p>Humidity</p>
+            </div>
+        </div>
+            <div class="col">
+            <img src="https://cdn-icons-png.flaticon.com/512/3731/3731279.png">
+            <div>
+                <p class="wind">15 km/hr</p>
+                <p>Wind speed</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apikey="33d5e63506af118a7c46f64b7657c035";
+        const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=bangalore";
+
+        const searchBox = document.querySelector(".search input");
+        const searchBtn=document.querySelector(".search button");
+        const weatherIcon=document.querySelector(".weather-icon");
+
+        async function checkWeather(){
+            const response=await fetch(apiUrl+`&appid=${apikey}`);
+            
+            if(response.status==404){
+                document.querySelector(".error").style.display="block";
+                document.querySelector(".weather").style.display="none";
+            }else
+
+            var data=await response.json();
+            
+
+            document.querySelector(".city").innerHTML=data.name;
+            document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+"°c";
+            document.querySelector(".humidity").innerHTML=Math.round(data.main.temp)+"%";
+            document.querySelector(".wind").innerHTML=Math.round(data.main.temp)+"km/h";
+
+           if(data.weather[0].main=="Clouds"){
+            weatherIcon.src="https://www.pngmart.com/files/11/Weather-Cloud-PNG-420x239.png";
+           }
+          else if(data.weather[0].main=="Clear"){
+            weatherIcon.src="https://cdn3.iconfinder.com/data/icons/common-app-business-symbols/1024/clear_clarify_clearly_realize_business_app-512.png";
+           } 
+           else if(data.weather[0].main=="Rain"){
+            weatherIcon.src="https://th.bing.com/th/id/R.bbce06a8afd24a1cf213d34e6c0c7d60?rik=Is8Fseq8X4um7A&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2frain-clipart-transparent%2frain-clipart-transparent-4.png&ehk=J4DY%2fFB0619nxKzBGM84qzGMfPNXnBUBYguu721fTYg%3d&risl=&pid=ImgRaw&r=0";
+           } 
+           else if(data.weather[0].main=="Drizzle"){
+            weatherIcon.src="https://cdn.icon-icons.com/icons2/139/PNG/512/drizzle_day_weather_20907.png";
+           }
+           else if(data.weather[0].main=="Mist"){
+            weatherIcon.src="https://th.bing.com/th/id/OIP.OLgxVZK0-PoXwdN-RQwcLQHaFj?rs=1&pid=ImgDetMain";
+           } 
+           document.querySelector(".weather").style.display="block";
+           document.querySelector(".error").style.display="none";
+           
+        }
+        searchBtn.addEventListener("click",()=>{
+            checkWeather(searchBox.value);
+
+        })
+        
+    </script>
+    
+</body>
+</html>
